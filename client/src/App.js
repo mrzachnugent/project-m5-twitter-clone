@@ -7,15 +7,17 @@ import Profile from "./Components/Profile/Profile";
 import GlobalStyles from "./GlobalStyles";
 import Sidebar from "./Components/Sidebar";
 import styled from "styled-components";
+import React, { useState } from "react";
 
 function App() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <Viewport>
       <GlobalStyles />
       <Sidebar />
       <Switch>
         <Route exact path="/">
-          <HomeFeed />
+          <HomeFeed isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
         </Route>
         <Route path="/notifications">
           <Notifications />
@@ -24,10 +26,13 @@ function App() {
           <Bookmarks />
         </Route>
         <Route path="/tweet/:tweetId">
-          <TweetDetails />
+          <TweetDetails
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+          />
         </Route>
         <Route path="/:profileId">
-          <Profile />
+          <Profile isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
         </Route>
       </Switch>
     </Viewport>

@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FiMessageCircle, FiRepeat, FiHeart, FiShare } from "react-icons/fi";
+import { FaHeart } from "react-icons/fa";
+import { ScaleIn } from "./ScaleIn";
 
-const handleOnClick = (e) => e.stopPropagation();
-const handleOnKey = (e) => e.stopPropagation();
-
+//I forgot to deconstruct the props
 const TweetActions = (isLiked, isRetweeted, numLikes, numRetweets, tweetId) => {
   const [isTweetLiked, setIsTweetLiked] = useState(isLiked.isLiked);
   const [tweetNumLikes, setTweetNumLikes] = useState(isLiked.numLikes);
+  const [isTweetRetweeted, setIsTweetRetweeted] = useState(isLiked.isRetweeted);
+  const [tweetNumRetweets, setTweetNumRetweets] = useState(isLiked.numRetweets);
   console.log(isLiked);
+  const { setIsModalOpen } = isLiked;
+
+  const handleOnClick = (e) => {
+    e.stopPropagation();
+    setIsModalOpen(true);
+  };
+  const handleOnKey = (e) => e.stopPropagation();
 
   const handleClickLike = (e) => {
     if (isTweetLiked) {
       document.getElementById("like-button").blur();
     }
-    console.log(!isLiked.isLiked);
     e.stopPropagation();
     fetch(`/api/tweet/${isLiked.tweetId}/like`, {
       method: "PUT",
@@ -36,7 +44,30 @@ const TweetActions = (isLiked, isRetweeted, numLikes, numRetweets, tweetId) => {
       .then(() => setIsTweetLiked(!isTweetLiked));
   };
 
-  const handleKeyLike = (e) => e.stopPropagation();
+  // const handleClickRetweet = (e) => {
+  //   if (isTweetRetweeted) {
+  //     document.getElementById("retweet-button").blur();
+  //   }
+  //   e.stopPropagation();
+  //   fetch(`/api/tweet/${isLiked.tweetId}/retweet`, {
+  //     method: "PUT",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //     body: JSON.stringify({ retweet: !isTweetRetweeted }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((message) => console.log(message))
+  //     .then(() => {
+  //       if (!isTweetRetweeted) {
+  //         setTweetNumRetweets(tweetNumRetweets + 1);
+  //       } else {
+  //         setTweetNumRetweets(tweetNumRetweets - 1);
+  //       }
+  //     })
+  //     .then(() => setIsTweetRetweeted(!isTweetRetweeted));
+  // };
 
   return (
     <Wrapper>
@@ -51,6 +82,7 @@ const TweetActions = (isLiked, isRetweeted, numLikes, numRetweets, tweetId) => {
           isRetweeted={isLiked.isRetweeted}
           onClick={handleOnClick}
           onKeyPress={handleOnKey}
+          id="retweet-button"
         >
           <FiRepeat />
         </RetweetButton>
@@ -62,10 +94,17 @@ const TweetActions = (isLiked, isRetweeted, numLikes, numRetweets, tweetId) => {
           onClick={handleClickLike}
           onKeyPress={handleOnKey}
           id="like-button"
+          style={{ height: "40px" }}
         >
-          <FiHeart />
+          {!isTweetLiked ? (
+            <FiHeart />
+          ) : (
+            <ScaleIn>
+              <FaHeart />
+            </ScaleIn>
+          )}
         </LikeButton>
-        {tweetNumLikes > 0 && <span>{tweetNumLikes}</span>}
+        {tweetNumLikes > 0 && <NumStats>{tweetNumLikes}</NumStats>}
       </IconAndNum>
       <IconAndNum>
         <ShareButton onClick={handleOnClick} onKeyPress={handleOnKey}>
@@ -153,6 +192,30 @@ const IconAndNum = styled.div`
 
   span {
     font-weight: 700;
+  }
+`;
+
+const NumStats = styled.span`
+  animation: fadeIn 0.5s;
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: scale(0);
+    }
+
+    33% {
+      opacity: 0;
+    }
+
+    50% {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    100% {
+      transform: scale(1);
+    }
   }
 `;
 

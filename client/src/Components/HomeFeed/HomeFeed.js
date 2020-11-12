@@ -7,8 +7,9 @@ import { PostTweet } from "./PostTweet";
 import TweetOverview from "../Tweets/TweetOverview";
 import { LoadingSpinnner } from "../LoadingSpinner";
 import { ErrorSection } from "../ErrorSection";
+import { ComingSoonModal } from "../ComingSoonModal";
 
-const HomeFeed = () => {
+const HomeFeed = ({ setIsModalOpen, isModalOpen }) => {
   const { currentUser, loadingStatus } = useContext(CurrentUserContext);
   const { handle, avatarSrc } = currentUser;
   const [feedTweetIDs, setFeedTweetIDs] = useState([]);
@@ -30,6 +31,7 @@ const HomeFeed = () => {
   return (
     <>
       <PageWrapper>
+        {isModalOpen && <ComingSoonModal setIsModalOpen={setIsModalOpen} />}
         {loadingStatus === "error" && <ErrorSection />}
         {loadingStatus === " loading" && <LoadingSpinnner />}
         {loadingStatus === "loaded" && feedStatus !== "error" && (
@@ -50,7 +52,11 @@ const HomeFeed = () => {
         {feedStatus === "loaded" && (
           <>
             {feedTweetIDs.map((id) => (
-              <TweetOverview tweetId={id} key={`tweet-${id}`} />
+              <TweetOverview
+                tweetId={id}
+                key={`tweet-${id}`}
+                setIsModalOpen={setIsModalOpen}
+              />
             ))}
           </>
         )}

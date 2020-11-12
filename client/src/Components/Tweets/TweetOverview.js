@@ -10,7 +10,7 @@ import { Icon } from "react-icons-kit";
 import { u1F4A3 as bomb } from "react-icons-kit/noto_emoji_regular/u1F4A3";
 import { CurrentUserContext } from "../../CurrentUserContext";
 
-const TweetOverview = ({ tweetId }) => {
+const TweetOverview = ({ tweetId, setIsModalOpen }) => {
   let history = useHistory();
   const { currentUser } = useContext(CurrentUserContext);
   const { handle } = currentUser;
@@ -167,6 +167,7 @@ const TweetOverview = ({ tweetId }) => {
                 numRetweets={numRetweets}
                 isRetweeted={isRetweeted}
                 tweetId={tweetId}
+                setIsModalOpen={setIsModalOpen}
               />
             )}
           </div>

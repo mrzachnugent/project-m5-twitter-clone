@@ -9,8 +9,9 @@ import TweetOverview from "../Tweets/TweetOverview";
 import { LoadingSpinnner } from "../LoadingSpinner";
 import { ErrorSection } from "../ErrorSection";
 import { COLORS } from "../../constants";
+import { ComingSoonModal } from "../ComingSoonModal";
 
-const Profile = () => {
+const Profile = ({ setIsModalOpen, isModalOpen }) => {
   const [twitterProfile, setTwitterProfile] = useState({});
   const [tabSelected, setTabSelected] = useState("tweets");
   const { profileId } = useParams();
@@ -44,6 +45,7 @@ const Profile = () => {
 
   return (
     <PageWrapper>
+      {isModalOpen && <ComingSoonModal setIsModalOpen={setIsModalOpen} />}
       {profileLoadingStatus === "loading" && <LoadingSpinnner />}
       {profileLoadingStatus === "loaded" && (
         <>
@@ -115,7 +117,11 @@ const Profile = () => {
       {loadingStatus === "loaded" && (
         <>
           {feedTweetIDs.map((id) => (
-            <TweetOverview tweetId={id} key={id} />
+            <TweetOverview
+              tweetId={id}
+              key={id}
+              setIsModalOpen={setIsModalOpen}
+            />
           ))}
         </>
       )}

@@ -8,8 +8,9 @@ import { PageTitle } from "../PageTitle";
 import { LoadingSpinnner } from "../LoadingSpinner";
 import { ErrorSection } from "../ErrorSection";
 import { CurrentUserContext } from "../../CurrentUserContext";
+import { ComingSoonModal } from "../ComingSoonModal";
 
-const TweetDetails = () => {
+const TweetDetails = ({ setIsModalOpen, isModalOpen }) => {
   const { tweetId } = useParams();
   let history = useHistory();
   const { currentUser } = useContext(CurrentUserContext);
@@ -62,6 +63,7 @@ const TweetDetails = () => {
 
   return (
     <PageWrapper>
+      {isModalOpen && <ComingSoonModal setIsModalOpen={setIsModalOpen} />}
       {loadingStatus === "loading" && <LoadingSpinnner />}
       {loadingStatus === "error" && <ErrorSection />}
       {loadingStatus === "loaded" && (
@@ -118,6 +120,7 @@ const TweetDetails = () => {
                 numRetweets={numRetweets}
                 isRetweeted={isRetweeted}
                 tweetId={tweetId}
+                setIsModalOpen={setIsModalOpen}
               />
             </div>
           </TweetWrapper>
