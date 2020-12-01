@@ -37,4 +37,4 @@ On the homepage, the user is able to create a new tweet by writing in the box an
 
 ![Posting a new tweet](./assets/screenshots/post-tweet.gif)
 
-It should show up in the feed below after posting.
+It shows up in the feed below after posting.
